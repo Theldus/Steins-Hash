@@ -6,7 +6,7 @@ A lightweight and fast web tool powered by WebAssembly that identifies Steins;Ga
 ## How to use?
 As in the demo below, just upload the image you want to search for and click 'Find Episode':
 
-
+https://github.com/Theldus/Steins-Hash/assets/8294550/f8a3a221-fef3-44a9-9d28-ba4fece2afd2
 
 ### Usage tips
 - Avoid very bright or very dark images
