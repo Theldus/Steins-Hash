@@ -29,7 +29,7 @@ static struct phash anime_hashes[] = {
 #define WIDTH        9
 #define HEIGHT       8
 #define CHANNELS     1
-#define MAX_DISTANCE 9
+#define MAX_DISTANCE 10
 
 #define NUM_FOUND 20
 
