@@ -32,7 +32,7 @@ Since the search code is done in C/WebAssembly, it is quite fast, even with such
 ## Indexing new episodes/animes
 While this repository and site are designed for Steins;Gate, all the code provided here can be effortlessly adapted to index other anime series as well. To achieve this, simply index the new episodes as outlined below:
 
-#### 1) Remove the current Steins;Gate index and build the index tool
+### 1) Remove the current Steins;Gate index and build the index tool
 ```bash
 $ cd Steins-Hash/
 $ rm hashes
@@ -41,7 +41,7 @@ $ rm hashes
 $ make index
 ```
 
-#### 2) Index a single or multiple episodes
+### 2) Index a single or multiple episodes
 ```bash
 $ ./index 
 Usage: ./index <video_path> <episode-number> <anime-identifier>
@@ -54,7 +54,7 @@ $ for ep in {1..24}; do ./index "/path/to/MyAnime/ep$f.mp4" $f 0 >> hashes; done
 ```
 The indexing process is quite fast and takes around ~1 minute per episode on an i5 7300HQ.
 
-#### 3) Build everything and run
+### 3) Build everything and run
 Once you have the list of hashes assembled, simply build the rest of the code with:
 ```bash
 $ make
@@ -70,6 +70,23 @@ $ python3 -m http.server
 ```
 
 Note that everything runs on the client-side, and there is no need for additional setup such as databases, etc.
+
+### 4) (Optional) Dedup hashes
+As anime series often include static scenes, it's common for adjacent frames to have identical hashes, leading to an unnecessarily large hash file.
+
+The `dedup.py` tool eliminates adjacent lines with the same hash, retaining only one copy of each unique hash. For Steins;Gate, this process resulted in a ~56% reduction in the final file size, decreasing from 216,159 to 94,743 hashes:
+
+```bash
+$ make dedup
+python dedup.py hashes new_hashes
+mv hashes original_hashes
+mv new_hashes hashes
+
+# Build webasm again
+$ make
+emcc -Wall -Wextra -O3 -s EXPORTED_FUNCTIONS='["_find_episode", "_malloc", "_free"]' find_ep.c -c
+emcc -Wall -Wextra -O3 -s EXPORTED_FUNCTIONS='["_find_episode", "_malloc", "_free"]' find_ep.o -o find_ep.js
+```
 
 > **Note**  
 To index/hash episodes, you must have [FFmpeg] and emcc ([Emscriptem SDK]) on your system and properly configured in the PATH.
