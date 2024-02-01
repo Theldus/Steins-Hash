@@ -20,5 +20,10 @@ find_ep.js: find_ep.o
 find_ep.o: hashes find_ep.c
 	$(CC_JS) $(CFLAGS_JS) find_ep.c -c
 
+dedup: hashes
+	python dedup.py hashes new_hashes
+	mv hashes original_hashes
+	mv new_hashes hashes
+
 clean:
 	rm -f find_ep.js find_ep.wasm index *.o
